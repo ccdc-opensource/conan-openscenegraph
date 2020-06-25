@@ -11,7 +11,6 @@ extends:
     package: openscenegraph
     package_version: 3.6.3
     destination_repository: ccdc-3rdparty-conan
-    artifactory_api_key: $(artifactory.api.key)
     build_types:
       - Release
       - Debug
