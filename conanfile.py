@@ -20,7 +20,9 @@ class OpenscenegraphConan(ConanFile):
         "build_osg_applications": [True, False],
         "build_osg_plugins_by_default": [True, False],
         "build_osg_examples": [True, False],
-        "dynamic_openthreads": [True, False]
+        "dynamic_openthreads": [True, False],
+        "with_curl_plugin": [True, False],
+        "with_resthttpdevice_plugin": [True, False],
     }
     default_options = {
         "shared": False,
@@ -28,7 +30,9 @@ class OpenscenegraphConan(ConanFile):
         "build_osg_applications": False,
         "build_osg_plugins_by_default": False,
         "build_osg_examples": False,
-        "dynamic_openthreads": True
+        "dynamic_openthreads": True,
+        "with_curl_plugin": False,
+        "with_resthttpdevice_plugin": False,
     }
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -38,17 +42,15 @@ class OpenscenegraphConan(ConanFile):
         "freetype/2.10.1",
         "libjpeg/9d",
         "libxml2/2.9.10",
-        "libcurl/7.70.0",
         "libpng/1.6.37",
         "libtiff/4.1.0",
         "jasper/2.0.14",
-        "cairo/1.17.2@",
+        "cairo/1.17.2",
         # "openblas/0.3.9", Removed until openblas is in conan center
     )
 
-    def requirements(self):
-        if self.settings.os != "Windows":
-            self.requires("asio/1.13.0")
+    def build_requirements(self):
+        self.build_requires("ninja/1.10.0")
 
     def system_requirements(self):
         if tools.os_info.is_linux:
@@ -91,12 +93,14 @@ class OpenscenegraphConan(ConanFile):
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
-        cmake = CMake(self)
+        cmake = CMake(self, generator='Ninja')
         cmake.definitions["BUILD_OSG_APPLICATIONS"] = self.options.build_osg_applications
         cmake.definitions["DYNAMIC_OPENSCENEGRAPH"] = self.options.shared
         cmake.definitions["BUILD_OSG_PLUGINS_BY_DEFAULT"] = self.options.build_osg_plugins_by_default
         cmake.definitions['BUILD_OSG_EXAMPLES'] = self.options.build_osg_examples
         cmake.definitions["DYNAMIC_OPENTHREADS"] = self.options.dynamic_openthreads
+        cmake.definitions["BUILD_OSG_PLUGIN_CURL"] = self.options.with_curl_plugin
+        cmake.definitions["BUILD_OSG_PLUGIN_RESTHTTPDEVICE"] = self.options.with_resthttpdevice_plugin
 
         if self.settings.compiler == "Visual Studio":
             cmake.definitions['BUILD_WITH_STATIC_CRT'] = "MT" in str(self.settings.compiler.runtime)
@@ -112,6 +116,11 @@ class OpenscenegraphConan(ConanFile):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
+        if os.path.exists(os.path.join(self.package_folder, 'lib64')):
+            # rhel installs libraries into lib64
+            os.rename(os.path.join(self.package_folder, 'lib64'),
+                      os.path.join(self.package_folder, 'lib'))
+
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
