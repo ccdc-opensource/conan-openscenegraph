@@ -93,7 +93,7 @@ class OpenscenegraphConan(ConanFile):
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
-        cmake = CMake(self, generator='Ninja')
+        cmake = CMake(self, set_cmake_flags=True)
         cmake.definitions["BUILD_OSG_APPLICATIONS"] = self.options.build_osg_applications
         cmake.definitions["DYNAMIC_OPENSCENEGRAPH"] = self.options.shared
         cmake.definitions["BUILD_OSG_PLUGINS_BY_DEFAULT"] = self.options.build_osg_plugins_by_default
