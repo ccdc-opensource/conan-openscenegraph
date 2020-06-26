@@ -8,9 +8,10 @@ resources:
 variables:
   osg.version: 3.6.3
 
+
 # OpenSceneGraph takes a while to build, so try to split by build type
-extends:
-  template: third-party-library-all-platforms-from-local-recipe.yml@templates
+jobs:
+- template: third-party-library-all-platforms-from-local-recipe.yml@templates
   parameters:
     package: openscenegraph
     package_version: $(osg.version)
@@ -18,8 +19,7 @@ extends:
     build_types:
       - Release
 
-extends:
-  template: third-party-library-all-platforms-from-local-recipe.yml@templates
+- template: third-party-library-all-platforms-from-local-recipe.yml@templates
   parameters:
     package: openscenegraph
     package_version: $(osg.version)
