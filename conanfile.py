@@ -50,7 +50,8 @@ class OpenscenegraphConan(ConanFile):
             self.requires("jasper/2.0.14"),
 
     def build_requirements(self):
-        self.build_requires("ninja/1.10.0")
+        if self.settings.os != 'Windows':
+            self.build_requires("ninja/1.10.0")
 
     def system_requirements(self):
         if tools.os_info.is_linux:
