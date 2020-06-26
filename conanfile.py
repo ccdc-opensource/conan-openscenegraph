@@ -37,17 +37,17 @@ class OpenscenegraphConan(ConanFile):
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
-    requires = (
-        "zlib/1.2.11",
-        "freetype/2.10.1",
-        "libjpeg/9d",
-        "libxml2/2.9.10",
-        "libpng/1.6.37",
-        "libtiff/4.1.0",
-        "jasper/2.0.14",
-        "cairo/1.17.2",
-        # "openblas/0.3.9", Removed until openblas is in conan center
-    )
+    def requirements(self):
+        self.requires("zlib/1.2.11"),
+        self.requires("freetype/2.10.1"),
+        self.requires("libxml2/2.9.10"),
+        self.requires("cairo/1.17.2"),
+        # OSG uses ImageIO on MacOs, which will conflict with libjpeg apparently
+        if self.settings.os != 'Macos':
+            self.requires("libjpeg/9d"),
+            self.requires("libpng/1.6.37"),
+            self.requires("libtiff/4.1.0"),
+            self.requires("jasper/2.0.14"),
 
     def build_requirements(self):
         self.build_requires("ninja/1.10.0")
@@ -101,6 +101,14 @@ class OpenscenegraphConan(ConanFile):
         cmake.definitions["DYNAMIC_OPENTHREADS"] = self.options.dynamic_openthreads
         cmake.definitions["BUILD_OSG_PLUGIN_CURL"] = self.options.with_curl_plugin
         cmake.definitions["BUILD_OSG_PLUGIN_RESTHTTPDEVICE"] = self.options.with_resthttpdevice_plugin
+
+        if self.settings.os == 'Macos':
+            cmake.definitions["OSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX"] = 'imageio'
+            cmake.definitions["BUILD_OSG_PLUGIN_IMAGEIO"] = True
+            cmake.definitions["BUILD_OSG_PLUGIN_JPEG"] = False
+            cmake.definitions["BUILD_OSG_PLUGIN_PNG"] = False
+            cmake.definitions["BUILD_OSG_PLUGIN_TIFF"] = False
+            cmake.definitions["BUILD_OSG_PLUGIN_JP2"] = False
 
         if self.settings.compiler == "Visual Studio":
             cmake.definitions['BUILD_WITH_STATIC_CRT'] = "MT" in str(self.settings.compiler.runtime)
