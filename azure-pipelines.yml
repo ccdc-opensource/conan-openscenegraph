@@ -5,12 +5,24 @@ resources:
       name: ccdc-3rd-party/conan-azure-devops
       ref: refs/heads/development
 
+variables:
+  osg.version: 3.6.3
+
+# OpenSceneGraph takes a while to build, so try to split by build type
 extends:
   template: third-party-library-all-platforms-from-local-recipe.yml@templates
   parameters:
     package: openscenegraph
-    package_version: 3.6.3
+    package_version: $(osg.version)
     destination_repository: ccdc-3rdparty-conan
     build_types:
       - Release
+
+extends:
+  template: third-party-library-all-platforms-from-local-recipe.yml@templates
+  parameters:
+    package: openscenegraph
+    package_version: $(osg.version)
+    destination_repository: ccdc-3rdparty-conan
+    build_types:
       - Debug
