@@ -92,6 +92,10 @@ class OpenscenegraphConan(ConanFile):
         tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = "{}-{}-".format(prefix, prefix) + self.version
         os.rename(extracted_dir, self._source_subfolder)
+        tools.replace_in_file(os.path.join(self._source_subfolder, 'src', 'osgPlugins', 'freetype', 'CMakeLists.txt'),
+        "SET(TARGET_EXTERNAL_LIBRARIES ${FREETYPE_LIBRARIES} )",
+        "SET(TARGET_EXTERNAL_LIBRARIES ${CONAN_LIBS_FREETYPE} ${CONAN_LIBS_LIBPNG} ${CONAN_LIBS_ZLIB} ${CONAN_LIBS_BZIP2} )"
+        )
 
     def _configure_cmake(self):
         cmake = CMake(self, set_cmake_flags=True)
@@ -102,6 +106,7 @@ class OpenscenegraphConan(ConanFile):
         cmake.definitions["DYNAMIC_OPENTHREADS"] = self.options.dynamic_openthreads
         cmake.definitions["BUILD_OSG_PLUGIN_CURL"] = self.options.with_curl_plugin
         cmake.definitions["BUILD_OSG_PLUGIN_RESTHTTPDEVICE"] = self.options.with_resthttpdevice_plugin
+        cmake.definitions["BUILD_OSG_PLUGIN_FREETYPE"] = True
 
         if self.settings.os == 'Macos':
             cmake.definitions["OSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX"] = 'imageio'
@@ -123,6 +128,7 @@ class OpenscenegraphConan(ConanFile):
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
+        self.copy(pattern="*", dst="freetype-plugin-source", src=os.path.join(self._source_subfolder, 'src', 'osgPlugins', 'freetype'))
         cmake = self._configure_cmake()
         cmake.install()
         if os.path.exists(os.path.join(self.package_folder, 'lib64')):
@@ -137,3 +143,5 @@ class OpenscenegraphConan(ConanFile):
             self.cpp_info.libs.append("rt")
         if not self.options.shared:
             self.cpp_info.defines.append("OSG_LIBRARY_STATIC=1")
+        freetype_plugin_path = os.path.join(self.package_folder, 'freetype-plugin-source')
+        self.user_info.openscenegraph_freetype_plugin_source = freetype_plugin_path
