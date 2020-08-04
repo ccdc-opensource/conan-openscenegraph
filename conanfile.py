@@ -107,6 +107,7 @@ class OpenscenegraphConan(ConanFile):
         cmake.definitions["BUILD_OSG_PLUGIN_CURL"] = self.options.with_curl_plugin
         cmake.definitions["BUILD_OSG_PLUGIN_RESTHTTPDEVICE"] = self.options.with_resthttpdevice_plugin
         cmake.definitions["BUILD_OSG_PLUGIN_FREETYPE"] = True
+        cmake.definitions["BUILD_OSG_PLUGIN_STL"] = True
 
         if self.settings.os == 'Macos':
             cmake.definitions["OSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX"] = 'imageio'
