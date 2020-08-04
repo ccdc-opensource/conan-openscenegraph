@@ -144,4 +144,4 @@ class OpenscenegraphConan(ConanFile):
         if not self.options.shared:
             self.cpp_info.defines.append("OSG_LIBRARY_STATIC=1")
         freetype_plugin_path = os.path.join(self.package_folder, 'freetype-plugin-source')
-        self.user_info.openscenegraph_freetype_plugin_source = freetype_plugin_path.replace(os.pathsep, '/')
+        self.user_info.openscenegraph_freetype_plugin_source = freetype_plugin_path.replace('\\', '/')
