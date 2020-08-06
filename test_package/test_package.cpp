@@ -1,4 +1,5 @@
 #include <osg/ArgumentParser>
+#include <osgViewer/Viewer>
 #include <FreeTypeLibrary.h>
 
 int main( int argc, char** argv )
@@ -10,6 +11,7 @@ int main( int argc, char** argv )
     arguments.getApplicationUsage()->addCommandLineOption("-h or --help","Display this information");
 	
     FreeTypeLibrary* ftl = FreeTypeLibrary::instance();
+    osgViewer::Viewer v;
     if (!ftl)
         return 1;
 	return 0;
