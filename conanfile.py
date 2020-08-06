@@ -139,80 +139,79 @@ class OpenscenegraphConan(ConanFile):
 
 
     def package_info(self):
+        postfix = "d" if self.settings.build_type=='Debug' else ""
         self.cpp_info.components["OpenThreads"].names["cmake_find_package"] = "OpenThreads"
-        self.cpp_info.components["OpenThreads"].libs = ["OpenThreads"]
+        self.cpp_info.components["OpenThreads"].libs = [f"OpenThreads{postfix}"]
 
         self.cpp_info.components["osg"].names["cmake_find_package"] = "osg"
-        self.cpp_info.components["osg"].libs = ["osg"]
+        self.cpp_info.components["osg"].libs = [f"osg{postfix}"]
         self.cpp_info.components["osg"].requires = ["OpenThreads"]
         self.cpp_info.components["osg"].defines.append("OSG_LIBRARY_STATIC=1")
         if self.settings.os == "Linux":
             self.cpp_info.components["osg"].libs.append("rt")
 
         self.cpp_info.components["osgDB"].names["cmake_find_package"] = "osgDB"
-        self.cpp_info.components["osgDB"].libs = ["osgDB"]
+        self.cpp_info.components["osgDB"].libs = [f"osgDB{postfix}"]
         self.cpp_info.components["osgDB"].requires = ["osg", "osgUtil", "OpenThreads", "zlib::zlib"]
 
         self.cpp_info.components["osgUtil"].names["cmake_find_package"] = "osgUtil"
-        self.cpp_info.components["osgUtil"].libs = ["osgUtil"]
+        self.cpp_info.components["osgUtil"].libs = [f"osgUtil{postfix}"]
         self.cpp_info.components["osgUtil"].requires = ["osg", "OpenThreads"]
 
         self.cpp_info.components["osgGA"].names["cmake_find_package"] = "osgGA"
-        self.cpp_info.components["osgGA"].libs = ["osgGA"]
+        self.cpp_info.components["osgGA"].libs = [f"osgGA{postfix}"]
         self.cpp_info.components["osgGA"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         self.cpp_info.components["osgText"].names["cmake_find_package"] = "osgText"
-        self.cpp_info.components["osgText"].libs = ["osgText"]
+        self.cpp_info.components["osgText"].libs = [f"osgText{postfix}"]
         self.cpp_info.components["osgText"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         self.cpp_info.components["osgViewer"].names["cmake_find_package"] = "osgViewer"
-        self.cpp_info.components["osgViewer"].libs = ["osgViewer"]
+        self.cpp_info.components["osgViewer"].libs = [f"osgViewer{postfix}"]
         self.cpp_info.components["osgViewer"].requires = ["osgGA", "osgText", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgAnimation"].names["cmake_find_package"] = "osgAnimation"
-        # self.cpp_info.components["osgAnimation"].libs = ["osgAnimation"]
+        # self.cpp_info.components["osgAnimation"].libs = [f"osgAnimation{postfix}"]
         # self.cpp_info.components["osgAnimation"].requires = ["osg", "osgText", "osgGA", "osgViewer", "OpenThreads"]
 
         # self.cpp_info.components["osgFX"].names["cmake_find_package"] = "osgFX"
-        # self.cpp_info.components["osgFX"].libs = ["osgFX"]
-        # self.cpp_info.components["osgFX"].requires = ["osg"]
+        # self.cpp_info.components["osgFX"].libs = [f"osgFX{postfix}"]
         # self.cpp_info.components["osgFX"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgManipulator"].names["cmake_find_package"] = "osgManipulator"
-        # self.cpp_info.components["osgManipulator"].libs = ["osgManipulator"]
+        # self.cpp_info.components["osgManipulator"].libs = [f"osgManipulator{postfix}"]
         # self.cpp_info.components["osgManipulator"].requires = ["osgViewer", "osgGA", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgParticle"].names["cmake_find_package"] = "osgParticle"
-        # self.cpp_info.components["osgParticle"].libs = ["osgParticle"]
+        # self.cpp_info.components["osgParticle"].libs = [f"osgParticle{postfix}"]
         # self.cpp_info.components["osgParticle"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgUI"].names["cmake_find_package"] = "osgUI"
-        # self.cpp_info.components["osgUI"].libs = ["osgUI"]
+        # self.cpp_info.components["osgUI"].libs = [f"osgUI{postfix}"]
         # self.cpp_info.components["osgUI"].requires = ["osgViewer", "osgText", "osgGA", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgVolume"].names["cmake_find_package"] = "osgVolume"
-        # self.cpp_info.components["osgVolume"].libs = ["osgVolume"]
+        # self.cpp_info.components["osgVolume"].libs = [f"osgVolume{postfix}"]
         # self.cpp_info.components["osgVolume"].requires = ["osgGA", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgShadow"].names["cmake_find_package"] = "osgShadow"
-        # self.cpp_info.components["osgShadow"].libs = ["osgShadow"]
+        # self.cpp_info.components["osgShadow"].libs = [f"osgShadow{postfix}"]
         # self.cpp_info.components["osgShadow"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgSim"].names["cmake_find_package"] = "osgSim"
-        # self.cpp_info.components["osgSim"].libs = ["osgSim"]
+        # self.cpp_info.components["osgSim"].libs = [f"osgSim{postfix}"]
         # self.cpp_info.components["osgSim"].requires = ["osgText", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgTerrain"].names["cmake_find_package"] = "osgTerrain"
-        # self.cpp_info.components["osgTerrain"].libs = ["osgTerrain"]
+        # self.cpp_info.components["osgTerrain"].libs = [f"osgTerrain{postfix}"]
         # self.cpp_info.components["osgTerrain"].requires = ["osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgWidget"].names["cmake_find_package"] = "osgWidget"
-        # self.cpp_info.components["osgWidget"].libs = ["osgWidget"]
-        # self.cpp_info.components["osgWidget"].requires = ["osg"]
+        # self.cpp_info.components["osgWidget"].libs = [f"osgWidget{postfix}"]
         # self.cpp_info.components["osgWidget"].requires = ["osgViewer", "osgText", "osgGA", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # self.cpp_info.components["osgPresentation"].names["cmake_find_package"] = "osgPresentation"
-        # self.cpp_info.components["osgPresentation"].libs = ["osgPresentation"]
+        # self.cpp_info.components["osgPresentation"].libs = [f"osgPresentation{postfix}"]
         # self.cpp_info.components["osgPresentation"].requires = ["osgViewer", "osgUI", "osgWidget", "osgManipulator", "osgVolume", "osgFX", "osgText", "osgGA", "osgUtil", "osgDB", "osg", "OpenThreads"]
 
         # Hack to get this over with
