@@ -225,5 +225,9 @@ class OpenscenegraphConan(ConanFile):
             self.cpp_info.components["all_plugin_dependencies"].requires.append("libtiff::libtiff")
             self.cpp_info.components["all_plugin_dependencies"].requires.append("jasper::jasper")
 
+        bin_path = os.path.join(self.package_folder, 'bin')
+        self.output.info('Appending PATH environment variable: %s' % bin_path)
+        self.env_info.PATH.append(bin_path)
+
         freetype_plugin_path = os.path.join(self.package_folder, 'freetype-plugin-source')
         self.user_info.openscenegraph_freetype_plugin_source = freetype_plugin_path.replace('\\', '/')
