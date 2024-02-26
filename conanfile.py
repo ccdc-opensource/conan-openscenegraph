@@ -38,20 +38,20 @@ class OpenscenegraphConan(ConanFile):
     _build_subfolder = "build_subfolder"
 
     def requirements(self):
-        self.requires("zlib/1.2.11"),
-        self.requires("freetype/2.10.1"),
-        self.requires("libxml2/2.9.10"),
-        self.requires("cairo/1.17.2"),
+        self.requires("zlib/1.2.13"),
+        self.requires("freetype/2.13.2"),
+        self.requires("libxml2/2.12.4"),
+        self.requires("cairo/1.17.8"),
+        self.requires("libpng/1.6.42"),
         # OSG uses ImageIO on MacOs, which will conflict with libjpeg apparently
         if self.settings.os != 'Macos':
-            self.requires("libjpeg/9d"),
-            self.requires("libpng/1.6.37"),
-            self.requires("libtiff/4.1.0"),
-            self.requires("jasper/2.0.14"),
+            self.requires("libjpeg/9e"),
+            self.requires("libtiff/4.6.0"),
+            self.requires("jasper/2.0.33"),
 
     def build_requirements(self):
         if self.settings.os != 'Windows':
-            self.build_requires("ninja/1.10.0")
+            self.build_requires("ninja/1.11.1")
 
     def system_requirements(self):
         if tools.os_info.is_linux:
